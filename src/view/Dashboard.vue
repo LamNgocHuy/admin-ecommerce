@@ -7,7 +7,7 @@
             <div class="d-flex align-items-start">
               <div class="flex-grow-1">
                 <h3 class="mb-2">
-                  {{overview.countAccount}}
+                  {{overview ? overview.countAccount : "0"}}
                 </h3>
                 <small class="text-muted mb-2">Số lượng người dùng</small>
               </div>
@@ -24,7 +24,7 @@
             <div class="d-flex align-items-start">
               <div class="flex-grow-1">
                 <h3 class="mb-2">
-                  {{overview.countShop}}
+                  {{overview ? overview.countShop : "0"}}
                 </h3>
                 <small class="text-muted mb-2">Số lượng cửa hàng</small>
               </div>
@@ -41,7 +41,7 @@
             <div class="d-flex align-items-start">
               <div class="flex-grow-1">
                 <h3 class="mb-2">
-                  {{overview.sumAllRevenue ? overview.sumAllRevenue : "0"}}
+                  {{overview ? overview.sumAllRevenue : "0"}}
                 </h3>
                 <small class="text-muted mb-2">Tổng doanh thu</small>
               </div>
@@ -58,7 +58,7 @@
             <div class="d-flex align-items-start">
               <div class="flex-grow-1">
                 <h3 class="mb-2">
-                  {{overview.countProduct}}
+                  {{overview ? overview.countProduc : "0"}}
                 </h3>
                 <small class="text-muted mb-2">Tổng sản phẩm</small>
               </div>
@@ -71,7 +71,7 @@
       </div>
     </div>
     <!-- Top 5 revenue shop -->
-    <div class="row">
+    <div class="row mb-3">
       <div class="col">
         <div class="card">
           <div class="card-body">
@@ -132,7 +132,7 @@
         <div class="card">
           <div class="card-body">
             <div class="card-title">
-              <h5>Top 5 doanh thu</h5>
+              <h5>Top 5 sản phảm bán chạy</h5>
               <small>Trong tháng {{new Date().getMonth()+1}}</small>
             </div>
             <div class="table-responsive">

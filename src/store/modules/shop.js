@@ -25,7 +25,7 @@ const mutations = {
 
 const actions = {
     getAllShopRevenue({commit}, id) {
-        http.get(`/api/admin/revenue-top/shops/month?id=${id}`)
+        http.get(`/api/admin/revenue-top/shops/month?limit=${id}`)
         .then((result) => {
             commit('setAllShopRevenue', result.data);
         }).catch((err) => {
