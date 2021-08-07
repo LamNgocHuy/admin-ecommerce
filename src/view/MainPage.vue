@@ -1,9 +1,6 @@
 <template>
   <div class="mainpage d-flex flex-row">
     <Sidebar/>
-    <div class="spinner-border text-light" role="status" style="font-size: .9rem" v-if="isLoader">
-      <span class="visually-hidden">Loading...</span>
-    </div>
     <router-view></router-view>
   </div>
 </template>
