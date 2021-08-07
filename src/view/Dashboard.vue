@@ -70,6 +70,7 @@
         </div>
       </div>
     </div>
+    <!-- Top 5 revenue shop -->
     <div class="row">
       <div class="col">
         <div class="card">
@@ -121,49 +122,61 @@
                 </tbody>
               </table>
             </div>
-            <div class="row">
-              <div class="col-auto me-auto">
-                <ul class="pagination d-flex flex-row mb-0">
-                  <li>
-                    <a
-                      @click="switchPage(num - 1)"
-                      :disabled="segmentPageAt == 1"
-                      >Prev</a
-                    >
-                  </li>
-                  <div class="d-flex">
-                    <div v-for="(num, index) in paginationArr" :key="index">
-                      <li>
-                        <a
-                          @click="switchPage(num)"
-                          :disabled="num == segmentPageAt"
-                          >{{ num }}</a
-                        >
-                      </li>
-                    </div>
-                  </div>
-                  <li>
-                    <a
-                      @click="switchPage(num + 1)"
-                      :disabled="segmentPageAt == segmentTotalPage"
-                      >Next</a
-                    >
-                  </li>
-                </ul>
-              </div>
-              <div class="col-auto col-3 d-flex flex-row">
-                <div class="col align-self-center">
-                  <select class="form-control">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                  </select>
-                </div>
-
-                <p class="mb-0 ms-3 align-self-center">
-                  Showing 11 - 20 of 350
-                </p>
-              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Top 5 best sell product -->
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
+              <h5>Top 5 doanh thu</h5>
+              <small>Trong tháng {{new Date().getMonth()+1}}</small>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead class="text-uppercase">
+                  <tr>
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Sold quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(product, index) in allProducts" :key="index">
+                    <td>{{ index }}</td>
+                    <td style="width: 350px">
+                      <div class="d-flex align-items-center">
+                        <div class="symbol symbol-40 symbol-sm flex-shrink-0">
+                          <img
+                            class=""
+                            :src="product.productThumbnail"
+                            alt="photo"
+                            width="40px"
+                            height="40px"
+                          />
+                        </div>
+                        <div class="ms-4">
+                          <div
+                            class="text-dark-75 font-weight-bolder font-size-lg mb-0"
+                          >
+                            {{ product.productName }}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ product.productPrice}}</td>
+                    <td>{{ product.categoryName }} / {{product.subcategoryName}}</td>
+                    <td>
+                      {{product.soldQuantity}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -183,12 +196,14 @@ export default {
   computed: {
     ...mapGetters({
       allShopRevenue: "shop/allShopRevenue",
-      overview: "shop/overview"
+      overview: "shop/overview",
+      allProducts: "product/allProducts"
     })
   },
   methods: {
     ...mapActions({
       getAllShopRevenue: "shop/getAllShopRevenue",
+      getAllProducts: "product/getAllProducts"
     })
   },
 };

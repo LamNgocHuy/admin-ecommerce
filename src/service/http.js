@@ -58,23 +58,6 @@ const service = {
           });
       });
   },
-    delete(endPoint, params) {
-      return new Promise((resolve, reject) => {
-        axios
-          .delete(`${API_URL}${endPoint}`, {
-            headers: localStorage.getItem("token")
-            ? { Authorization: `Bearer ${localStorage.getItem("token")}` }
-            : null,
-            data: params
-          })
-          .then((response) => {
-            handleSuccessResponse(response, resolve);
-          })
-          .catch((error) => {
-            handleErrorResponse(error, reject);
-          });
-      });
-  },
 }
 
 export default service;

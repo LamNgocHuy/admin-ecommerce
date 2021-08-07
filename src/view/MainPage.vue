@@ -26,7 +26,8 @@ export default {
       getAllAccounts: "account/getAllAccounts",
       getPersonalAdminInfo: "auth/getPersonalAdminInfo",
       getAllShopRevenue: "shop/getAllShopRevenue",
-      getOverview: "shop/getOverview"
+      getOverview: "shop/getOverview",
+      getAllProducts: "product/getAllProducts"
     })
   },
   created() {
@@ -34,6 +35,7 @@ export default {
     this.getPersonalAdminInfo(localStorage.getItem("adminId"));
     this.getAllShopRevenue(5);
     this.getOverview();
+    this.getAllProducts();
   }
 }
 </script>

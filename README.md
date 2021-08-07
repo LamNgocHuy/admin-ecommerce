@@ -36,5 +36,5 @@ https://admin-ecommer-nh7.netlify.app/
 - Xem thông tin chi tiết người dùng
 - Khóa, mở tài khoản người dùng
 - Thống kê doanh số bán hàng của các shop theo tháng
+- Thống kê top 10 sản phẩm bán chạy 
 - Phân quyền cho tài khoản người dùng (đang tiến hành)
-- Thống kê top 10 sản phẩm bán chạy (đang tiến hành)
