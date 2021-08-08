@@ -58,7 +58,7 @@
             <div class="d-flex align-items-start">
               <div class="flex-grow-1">
                 <h3 class="mb-2">
-                  {{overview ? overview.countProduc : "0"}}
+                  {{overview ? overview.countProduct : "0"}}
                 </h3>
                 <small class="text-muted mb-2">Tổng sản phẩm</small>
               </div>
