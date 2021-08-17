@@ -18,7 +18,7 @@ const mutations = {
 
 const actions = {
     getAllProducts({commit}) {
-        http.get(`api/admin/products/best-sell/month?limit=5`)
+        http.get(`/api/admin/products/best-sell/month?limit=5`)
         .then((result) => {
             commit('setAllProducts', result.data);
         }).catch((err) => {

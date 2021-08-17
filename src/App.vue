@@ -7,9 +7,14 @@
 <script>
 import axios from 'axios'
 import router from './router/routes'
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 export default {
   name: 'App',
+  computed: {
+    ...mapGetters({
+      notification: "notification/notification"
+    })
+  },
   created() {
     axios.interceptors.request.use(
       (config) => {
@@ -23,6 +28,13 @@ export default {
     );
     axios.interceptors.response.use(
       (response) => {
+        if (this.notification != null) {
+          this.$notify({
+            text: this.notification,
+            duration: 3000
+          });
+        }
+        this.setNotification(null);
         this.hideLoader();
         if (response.data.status === 0) {
           localStorage.removeItem("token");
@@ -40,7 +52,10 @@ export default {
     ...mapActions('loader', [
       'showLoader',
       'hideLoader'
-    ])
+    ]),
+    ...mapActions({
+      setNotification: "notification/setNotification"
+    })
   }
 }
 </script>
@@ -55,8 +70,8 @@ export default {
 }
 
 :root {
-  --bg-primary: #ffbe76;
-  --primary-color: #fd9644;
+  --bg-primary: #7777dd;
+  --primary-color: #40407a;
   --secondary-color: #ffcd955e;
   --input-color: #e4e6ef;
   --text-color: #3f3f3f;
@@ -157,7 +172,7 @@ background: var(--input-color) !important;
 }
 
 .valid-feedback {
-  color: #1bc5bd;
+  color: #2ecc71;
 }
 
 .card {
@@ -170,8 +185,16 @@ table {
   font-weight: 600 !important;
 }
 
+table > tbody > tr > td {
+  padding: 5px !important;
+}
+
+table > thead > tr > th {
+  padding: 5px !important;
+}
+
 .table-responsive {
-  max-height: 300px ;
+  max-height: 70vh;
   min-height: 300px;
 }
 
@@ -207,8 +230,8 @@ tbody > tr > td {
 }
 
 .badge-active {
-  color: #1bc5bd !important;
-  background-color: #c9f7f5;
+  color: #2ecc71 !important;
+  background-color: #a7fdcb;
 }
 
 .badge-inactive {
@@ -217,21 +240,21 @@ tbody > tr > td {
 }
 
 .pagination li a {
-    position: relative;
-    display: block;
-    width: 30px;
-    height: 30px;
-    font-size: .75rem !important;
-    font-weight: 500;
-    text-align: center;
-    line-height: 32px;
-    background: #f3f6f9;
-    color: #7E8299;
-    text-decoration: none;
-    margin: 5px;
-    border-radius: 50%;
-    cursor: pointer;
-    user-select: none;
+  position: relative;
+  display: block;
+  width: 30px;
+  height: 30px;
+  font-size: .75rem !important;
+  font-weight: 500;
+  text-align: center;
+  line-height: 32px;
+  background: #f3f6f9;
+  color: #7E8299;
+  text-decoration: none;
+  margin: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
 }
 
 .pagination li a:hover,
@@ -247,5 +270,12 @@ tbody > tr > td {
 .text-muted {
   color: #B5B5C3 !important;
   font-size: 600 !important;
+}
+
+.my-notification {
+  background: #2ecc71 !important;
+  padding: 15px;
+  margin: 0 5px 5px 0;
+  color: #fff;
 }
 </style>

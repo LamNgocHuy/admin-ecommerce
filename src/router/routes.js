@@ -5,7 +5,8 @@ import Login from '../view/Login.vue'
 import Dashboard from '../view/Dashboard.vue'
 import ManageAccount from '../view/ManageAccount.vue'
 import AdminProfile from '../view/AdminProfile.vue'
-import auth from '../store/modules/auth'
+import ManageRole from '../view/ManageRole.vue'
+// import auth from '../store/modules/auth'
 
 Vue.use(VueRouter);
 
@@ -33,7 +34,13 @@ const routes = [
                 name: 'admin-profile',
                 component: AdminProfile,
                 meta: { requiresAuth: true }
-            }
+            },
+            {
+                path: 'manage-role',
+                name: 'manage-role',
+                component: ManageRole,
+                meta: { requiresAuth: true }
+            },
         ]
     },
     {
@@ -57,8 +64,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('token');
     if (token) {
-        console.log("ok")
-      auth.actions.getPersonalAdminInfo(localStorage.getItem("adminId"));
+        token;
     }
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       if (localStorage.getItem('token') === null) {

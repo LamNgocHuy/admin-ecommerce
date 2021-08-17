@@ -1,4 +1,5 @@
 import http from "../../service/http";
+import notification from "../modules/notification"
 
 const state = {
   allAccounts: [],
@@ -31,9 +32,9 @@ const actions = {
     http
       .post(`/api/admin/accounts/${id}/lock_user`)
       .then((result) => {
-        commit;
-        result;
+        notification.state.notification = result.data;
         dispatch("getAllAccounts");
+        commit;
       })
       .catch((err) => {
         console.log(err);
@@ -43,9 +44,9 @@ const actions = {
     http
       .post(`/api/admin/accounts/${id}/unlock_user`)
       .then((result) => {
-        commit;
-        result;
+        notification.state.notification = result.data;
         dispatch("getAllAccounts");
+        commit;
       })
       .catch((err) => {
         console.log(err);
@@ -67,8 +68,8 @@ const actions = {
     http
       .post(`api/admin/accounts?id=${id}`)
       .then((result) => {
+        notification.actions.setNotification(result.data);
         commit;
-        result;
       })
       .catch((err) => {
         console.log(err);

@@ -7,10 +7,12 @@ import router from './router/routes'
 import store from './store'
 import Vuelidate from 'vuelidate'
 import VTooltip from 'v-tooltip'
+import Notifications from 'vue-notification'
 import firebase from 'firebase'
 
-Vue.use(Vuelidate);
 Vue.use(VTooltip);
+Vue.use(Notifications);
+Vue.use(Vuelidate);
 Vue.config.productionTip = false;
 
 firebase.initializeApp({

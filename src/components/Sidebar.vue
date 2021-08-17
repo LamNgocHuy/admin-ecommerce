@@ -4,8 +4,8 @@
     id="sidebar"
   >
     <a href="#" class="navbar-brand mt-5">
-      <!-- <img src="../assets/logo.png" class="avatar avatar-circle" alt=""> -->
-      <p class="text-dark">Ngoc Huy</p>
+      <img src="../assets/logoTeam.png" class="avatar avatar-circle" width="150px" height="150px">
+      <!-- <p class="text-dark">Ngoc Huy</p> -->
     </a>
     <ul class="navbar-nav d-flex flex-column mt-5 w-100">
       <li class="nav-item w-100">
@@ -24,6 +24,12 @@
         <router-link :to="{ path: '/admin-profile' }" class="nav-link ps-4">
           <i class="bx bxs-cog"></i>
           <span class="ms-2">Setting</span>
+        </router-link>
+      </li>
+      <li class="nav-item w-100">
+        <router-link :to="{ path: '/manage-role' }" class="nav-link ps-4">
+          <i class='bx bxs-user-badge'></i>
+          <span class="ms-2">Manage role</span>
         </router-link>
       </li>
       <li class="nav-item w-100">

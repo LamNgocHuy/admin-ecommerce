@@ -1,6 +1,113 @@
 <template>
   <div class="container">
     <div class="row">
+      <div class="col col-sm-9">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
+              <h5>Danh sách tài khoản người dùng</h5>
+              <small>Quản lí tài khoản</small>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class="text-uppercase">
+                  <tr>
+                    <th>#</th>
+                    <th>Personal Info</th>
+                    <th>Address</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="(account, index) in accountsPagination"
+                    :key="index"
+                  >
+                    <td>{{ index + 1 + (accountPageAt - 1) * limit }}</td>
+                    <td style="width: 350px">
+                      <div class="d-flex align-items-center">
+                        <div class="symbol symbol-40 symbol-sm flex-shrink-0">
+                          <img
+                            v-if="account.avatarUrl"
+                            :src="account.avatarUrl"
+                            width="40px"
+                            height="40px"/>
+                          <img 
+                            v-else
+                            src="../assets/l60Hf.png"
+                            width="40px" 
+                            height="40px">
+                        </div>
+                        <div class="ms-4">
+                          <div
+                            class="text-dark-75 font-weight-bolder font-size-lg mb-0">
+                            {{ account.fullName ? account.fullName : "Chưa cập nhật"}}
+                          </div>
+                          <a
+                            class="text-muted font-weight-bold text-hover-primary"
+                            >{{ account.email ? account.email : "Chưa cập nhật"}}</a>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ account.address ? account.address : "Chưa cập nhật"}}</td>
+                    <td class="text-center">
+                      <span class="badge badge-active" v-if="account.status">Active</span>
+                      <span class="badge badge-inactive" v-else>Inactive</span>
+                    </td>
+                    <td class="text-center">
+                      <i class='bx bx-show-alt' 
+                          @click="viewInfo(account)"
+                          v-tooltip="{content: 'View Info'}"></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="row">
+              <div class="col-auto me-auto">
+                <ul class="pagination d-flex flex-row mb-0">
+                  <li>
+                    <a @click="accountPageAt - 1" :disabled="accountPageAt == 1"
+                      >Prev</a>
+                  </li>
+                  <div class="d-flex">
+                    <div v-for="(num, index) in paginationArr" :key="index">
+                      <li>
+                        <a
+                          @click="accountPageAt = num"
+                          :disabled="num == accountPageAt"
+                          >{{ num }}</a>
+                      </li>
+                    </div>
+                  </div>
+                  <li>
+                    <a
+                      @click="accountPageAt + 1"
+                      :disabled="accountPageAt == accountTotalPage"
+                      >Next</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-auto col-3 d-flex flex-row">
+                <div class="col align-self-center">
+                  <select class="form-control" v-model="limit">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                  </select>
+                </div>
+
+                <p class="mb-0 ms-3 align-self-center">
+                  Showing {{ (accountPageAt - 1) * limit + 1 }} -
+                  {{ accountPageAt * limit }} of {{ this.allAccounts.length }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="col col-md-3">
         <div class="card">
           <div class="card-body p-4" v-if="userInfo">
@@ -67,112 +174,6 @@
           </div>
         </div>
       </div>
-      <div class="col col-sm-9">
-        <div class="card">
-          <div class="card-body">
-            <div class="card-title">
-              <h5>Danh sách tài khoản người dùng</h5>
-              <small>Quản lí tài khoản</small>
-            </div>
-            <div class="table-responsive">
-              <table class="table table-hover">
-                <thead class="text-uppercase">
-                  <tr>
-                    <th>#</th>
-                    <th>Personal Info</th>
-                    <th>Address</th>
-                    <th>Status</th>
-                    <th class="text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="(account, index) in accountsPagination"
-                    :key="index"
-                  >
-                    <td>{{ index + 1 + (accountPageAt - 1) * limit }}</td>
-                    <td style="width: 350px">
-                      <div class="d-flex align-items-center">
-                        <div class="symbol symbol-40 symbol-sm flex-shrink-0">
-                          <img
-                            v-if="account.avatarUrl"
-                            :src="account.avatarUrl"
-                            width="40px"
-                            height="40px"/>
-                          <img 
-                            v-else
-                            src="../assets/l60Hf.png"
-                            width="40px" 
-                            height="40px">
-                        </div>
-                        <div class="ms-4">
-                          <div
-                            class="text-dark-75 font-weight-bolder font-size-lg mb-0">
-                            {{ account.fullName ? account.fullName : "Chưa cập nhật"}}
-                          </div>
-                          <a
-                            class="text-muted font-weight-bold text-hover-primary"
-                            >{{ account.email ? account.email : "Chưa cập nhật"}}</a>
-                        </div>
-                      </div>
-                    </td>
-                    <td>{{ account.address ? account.address : "Chưa cập nhật"}}</td>
-                    <td>
-                      <span class="badge badge-active" v-if="account.status">Active</span>
-                      <span class="badge badge-inactive" v-else>Inactive</span>
-                    </td>
-                    <td class="text-center">
-                      <i class='bx bx-show-alt' 
-                         @click="viewInfo(account)"
-                         v-tooltip="{content: 'View Info'}"></i>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="row">
-              <div class="col-auto me-auto">
-                <ul class="pagination d-flex flex-row mb-0">
-                  <li>
-                    <a @click="accountPageAt - 1" :disabled="accountPageAt == 1"
-                      >Prev</a>
-                  </li>
-                  <div class="d-flex">
-                    <div v-for="(num, index) in paginationArr" :key="index">
-                      <li>
-                        <a
-                          @click="accountPageAt = num"
-                          :disabled="num == accountPageAt"
-                          >{{ num }}</a>
-                      </li>
-                    </div>
-                  </div>
-                  <li>
-                    <a
-                      @click="accountPageAt + 1"
-                      :disabled="accountPageAt == accountTotalPage"
-                      >Next</a>
-                  </li>
-                </ul>
-              </div>
-              <div class="col-auto col-3 d-flex flex-row">
-                <div class="col align-self-center">
-                  <select class="form-control" v-model="limit">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                  </select>
-                </div>
-
-                <p class="mb-0 ms-3 align-self-center">
-                  Showing {{ (accountPageAt - 1) * limit + 1 }} -
-                  {{ accountPageAt * limit }} of {{ this.allAccounts.length }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -190,7 +191,7 @@ export default {
   computed: {
     ...mapGetters({
       allAccounts: "account/allAccounts",
-      isLoader: "loader/isLoader"
+      isLoader: "loader/isLoader",
     }),
     paginationArr() {
       if (this.accountTotalPage <= 5)
@@ -214,7 +215,7 @@ export default {
   methods: {
     ...mapActions({
       lockAccount: "account/lockAccount",
-      unlockAccount: "account/unlockAccount"
+      unlockAccount: "account/unlockAccount",
     }),
     range(start, end) {
       return Array(end - start + 1)

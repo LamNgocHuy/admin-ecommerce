@@ -5,6 +5,8 @@ import account from './modules/account'
 import product from './modules/product'
 import shop from './modules/shop'
 import loader from './modules/loader'
+import role from './modules/role'
+import notification from './modules/notification'
 
 Vue.use(Vuex)
 
@@ -14,6 +16,8 @@ export default new Vuex.Store({
         account,
         product,
         shop,
-        loader
+        loader,
+        role,
+        notification
     }
 });

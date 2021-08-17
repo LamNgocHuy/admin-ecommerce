@@ -54,7 +54,7 @@ const actions = {
   changePersonalInfo({dispatch, commit}, params) {
     http.post(`/api/admin/personal-info`, params)
     .then((result) => {
-      console.log(result);
+      result;
       dispatch("getPersonalAdminInfo", localStorage.getItem("adminId"));
       commit;
     })

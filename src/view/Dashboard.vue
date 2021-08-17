@@ -87,7 +87,7 @@
                     <th>Shop</th>
                     <th>Owner</th>
                     <th>Revenue</th>
-                    <th>Sold quantity</th>
+                    <th>Sold products</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -116,7 +116,7 @@
                     <td>{{ shop.ownerName}}</td>
                     <td>{{ shop.revenue }}</td>
                     <td>
-                      {{shop.quantitySell}}
+                      {{ shop.quantitySell }}
                     </td>
                   </tr>
                 </tbody>
