@@ -7,6 +7,7 @@
           <div class="card-body">
             <div class="card-title">
               <h5>Roles</h5>
+              <button class="btn btn-primary" @click="toggleCreateModal">Create</button>
             </div>
             <div class="table-responsive">
               <table class="table table-sm table-bordered">
@@ -20,7 +21,7 @@
                 <tbody>
                   <tr v-for="(role, index) in allRoles" :key="index" >
                     <td>{{role.roleName}}</td>
-                    <td>{{role.permissions.length}}</td>
+                    <td>{{role.permissions!=null ? role.permissions.length : 0}}</td>
                     <td class="text-center">
                       <i
                         class="bx bxs-pencil"
@@ -39,8 +40,14 @@
       <div class="col col-sm-7">
         <div class="card">
           <div class="card-body">
+            <div class="form-group mb-3">
+              <label>Role name</label>
+              <input type="text" class="form-control" v-model="roleParams.roleName">
+            </div>
             <div class="card-title">
-              <h5>Permissions Of <span style="color: #fd9644; font-size: 1.5rem !important">{{roleParams.roleName}}</span></h5>
+              <label class="fw-bold" style="font-size: 1.1rem !important">Permissions of 
+                <span style="color: #fd9644; font-size: 1.2rem !important">{{roleParams.roleName}}</span>
+              </label>
             </div>
             <div class="table-responsive">
               <table class="table table-sm table-bordered">
@@ -73,6 +80,34 @@
           </div>
         </div>
       </div>
+      <!-- [Modal] create new role -->
+      <div id="createNewModal">
+        <div class="content">
+          <p class="title">Create new role</p>
+          <div class="form-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Role name"
+              v-model="newRole.roleName"
+            />
+          </div>
+          <div class="footer">
+            <button
+              class="btn btn-primary"
+              @click="createNew"
+            >
+             <span v-if="!isLoader">Save</span>
+            <div class="spinner-border text-light" role="status" style="font-size: .9rem" v-else>
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            </button>
+          </div>
+          <a class="close-btn" @click="toggleCreateModal">
+            <i class="bx bx-x"></i>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -88,6 +123,9 @@ export default {
         roleName: null,
         permissions: []
       },
+      newRole: {
+        roleName: ""
+      }
     }
   },
   computed: {
@@ -100,16 +138,27 @@ export default {
   methods: {
     ...mapActions({
       updateRole: "role/updateRole",
+      createNewRole: "role/createNewRole"
     }),
     editPermission(role) {
+      this.roleParams.id = role.id;
+      this.roleParams.roleName = role.roleName;
+      this.roleParams.permissions = [];
+      if (role.permissions == null) {
+        role.permissions = [];
+      }
       for (let i = 0; i < role.permissions.length; i++) {
         this.roleParams.permissions.push(role.permissions[i].id);
       }
-      this.roleParams.id = role.id;
-      this.roleParams.roleName = role.roleName;
+    },
+    toggleCreateModal() {
+      console.log("oke")
+      document.getElementById("createNewModal").classList.toggle("active");
     },
     saveChange()  {
       let params = {
+        id: this.roleParams.id,
+        roleName: this.roleParams.roleName,
         permissions: []
       };
       for (let i = 0; i < this.roleParams.permissions.length; i++) 
@@ -120,6 +169,9 @@ export default {
         params: params,
         id: this.roleParams.id,
       });
+    },
+    createNew() {
+      this.createNewRole(this.newRole);
     }
   }
 };
@@ -185,5 +237,64 @@ input[type="checkbox"]::after {
 input:checked::after {
   transform: translate(170%, -50%);
   opacity: 1;
+}
+
+#createNewModal {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: #fff;
+  width: 350px;
+  max-height: 550px;
+  padding: 20px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+  transition: 0.5s;
+  visibility: hidden;
+}
+
+#createNewModal .content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+
+#createNewModal .content .title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+#createNewModal .footer {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 5px;
+}
+
+#createNewModal .close-btn {
+  font-size: 20px;
+  color: #333;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+#createNewModal.active {
+  top: 50%;
+  visibility: visible;
+}
+
+.card-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.card-title button {
+  padding: 10px;
+  margin-left: auto;
 }
 </style>

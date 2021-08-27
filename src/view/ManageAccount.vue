@@ -108,9 +108,10 @@
           </div>
         </div>
       </div>
+      <!-- User Info Card -->
       <div class="col col-md-3">
         <div class="card">
-          <div class="card-body p-4" v-if="userInfo">
+          <div class="card-body p-4" v-if="userInfo!=null">
             <div class="d-flex align-items center">
               <img v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" class="personal-avatar" alt="" width="60px" height="60px">
               <img v-else src="../assets/l60Hf.png" class="personal-avatar" alt="" width="60px" height="60px">
@@ -118,7 +119,7 @@
                 <p
                   class="fw-bold fs-5 text-dark text-truncate mb-1"
                   style="max-width: 150px">
-                  {{userInfo.fullName ? userInfo.fullName : "Chưa cập nhật"}}
+                  {{userInfo.fullName || userInfo ? userInfo.fullName : "Chưa cập nhật"}}
                 </p>
                 <p class="text-muted">User</p>
               </div>
@@ -128,7 +129,7 @@
                 <span class="flex-shrink-0 me-2">
                   <i class="bx bxs-phone-call fs-4"></i>
                 </span>
-                <span>{{userInfo.phoneNumber ? userInfo.fullName : "Chưa cập nhật"}}</span>
+                <span>{{userInfo.phoneNumber ? userInfo.phoneNumber : "Chưa cập nhật"}}</span>
               </div>
               <div class="d-flex align-items-center mb-2 text-muted">
                 <span class="flex-shrink-0 me-2">
@@ -148,6 +149,7 @@
                 </span>
                 <span>{{userInfo.dayOfBirth ? userInfo.dayOfBirth : "Chưa cập nhật"}}</span>
               </div>
+              <button class="btn btn-primary mt-3 w-100" @click="toggleUpdateRolesModal">Update roles</button>
               <button
                 v-if="!userInfo.status"
                 class="btn btn-primary mt-3 w-100 btn-lock"
@@ -174,6 +176,46 @@
           </div>
         </div>
       </div>
+      <!-- Update roles Modal -->
+      <div id="updateRolesModal">
+        <div class="content">
+          <h6>Choose roles for {{userInfo ? userInfo.fullName : ""}}</h6>
+          <div id="chooseRolesTab">
+            <div class="checkbox">
+              <label v-for="role in allRoles" :key="role.id">
+                <input
+                  type="checkbox"
+                  :value="{ id: role.id, roleName: role.roleName }"
+                  v-model="listRolesParam"
+                />
+                <span>
+                  <p>
+                    {{ role.roleName }}
+                  </p>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <button
+            class="btn btn-primary"
+            @click="saveRolesChange"
+            v-bind:disabled="
+              listRolesParam.length == 0 ||
+              listRolesParam == userInfo.roles
+            "
+          >
+            <span v-if="!isLoader">Save changes</span>
+            <div class="spinner-border text-light" role="status" style="font-size: .9rem" v-else>
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </button>
+        </div>
+        <a class="close-btn" @click="toggleUpdateRolesModal">
+          <i class="bx bx-x"></i>
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -185,13 +227,15 @@ export default {
     return {
       limit: 5,
       accountPageAt: 1,
-      userInfo: null
+      userInfo: null,
+      listRolesParam: []
     };
   },
   computed: {
     ...mapGetters({
       allAccounts: "account/allAccounts",
       isLoader: "loader/isLoader",
+      allRoles: "role/allRoles",
     }),
     paginationArr() {
       if (this.accountTotalPage <= 5)
@@ -216,6 +260,7 @@ export default {
     ...mapActions({
       lockAccount: "account/lockAccount",
       unlockAccount: "account/unlockAccount",
+      updateRolesForUser: "account/updateRolesForUser"
     }),
     range(start, end) {
       return Array(end - start + 1)
@@ -224,6 +269,18 @@ export default {
     },
     viewInfo(data) {
       this.userInfo = data;
+      this.listRolesParam = this.userInfo.roles;
+    },
+    toggleUpdateRolesModal() {
+      document.getElementById("updateRolesModal").classList.toggle("active");
+    },
+    saveRolesChange() {
+      this.updateRolesForUser(
+        {
+          id: this.userInfo.id,
+          params: this.listRolesParam
+        }
+      );
     }
   },
   created() {
@@ -298,5 +355,98 @@ button > i {
 
 .btn-unlock {
   background: #1bc5bd !important;
+}
+
+#updateRolesModal {
+  position: fixed;
+  top: -100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: #fff;
+  width: 300px;
+  max-height: 550px;
+  padding: 20px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+  transition: 0.5s;
+  visibility: hidden;
+}
+
+#updateRolesModal .content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+
+#chooseRolesTab {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#chooseRolesTab .checkbox label {
+  position: relative;
+  cursor: pointer;
+  width: 100%;
+}
+
+#chooseRolesTab .checkbox input[type="checkbox"] {
+  display: none;
+}
+
+#chooseRolesTab .checkbox label span {
+  width: 100%;
+  height: 40px;
+  position: relative;
+  display: inline-block;
+  background: #fff;
+  padding: 8px 15px;
+  color: #000;
+  border-radius: 10px;
+  border: 2px solid #dfe2e6;
+  font-size: 1rem;
+  user-select: none;
+  overflow: hidden;
+}
+
+#chooseRolesTab .checkbox label span p {
+  border: none;
+  margin: 0 !important;
+}
+
+#chooseRolesTab .checkbox label span::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#chooseRolesTab .checkbox label input[type="checkbox"]:checked ~ span {
+  color: #c80064;
+  background: rgb(255, 247, 248);
+  border-color: #c80064;
+}
+
+#updateRolesModal .footer {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 5px;
+}
+
+#updateRolesModal .close-btn {
+  font-size: 20px;
+  color: #333;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+#updateRolesModal.active {
+  top: 50%;
+  visibility: visible;
 }
 </style>

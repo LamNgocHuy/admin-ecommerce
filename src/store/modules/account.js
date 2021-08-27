@@ -52,12 +52,12 @@ const actions = {
         console.log(err);
       });
   },
-  changeAuthorAccount({ dispatch, commit }, { idUser, idRole }) {
+  updateRolesForUser({ dispatch, commit }, {id, params}) {
     http
-      .post(`/api/admin/accounts?idUser=${idUser}&idRole=${idRole}`)
+      .put(`/api/home/users/${id}/roles`, params)
       .then((result) => {
         commit;
-        result;
+        notification.state.notification = result.data;
         dispatch("getAllAccounts");
       })
       .catch((err) => {

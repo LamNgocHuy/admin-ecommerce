@@ -1,4 +1,5 @@
 import http from "../../service/http";
+import notification from "../modules/notification"
 
 const state = {
   allRoles: [],
@@ -48,7 +49,7 @@ const actions = {
     http
       .put(`/api/home/roles/${id}`, params)
       .then((result) => {
-        result;
+        notification.state.notification = result.data;
         commit;
         dispatch("getAllRoles");
       })
@@ -58,9 +59,9 @@ const actions = {
   },
   createNewRole({ commit, dispatch }, params) {
     http
-      .post(`/api/admin/roles`, params)
+      .post(`/api/home/roles`, params)
       .then((result) => {
-        result;
+        notification.state.notification = result.data;
         commit;
         dispatch("getAllRoles");
       })
